@@ -1,4 +1,4 @@
-# TO-DO:
+# TODO:
 ​## progress bar
 ​- Endpoints
  - [ ] /
