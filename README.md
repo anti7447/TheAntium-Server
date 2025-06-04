@@ -1,14 +1,14 @@
 # TODO:
-​## progress bar
-​- Endpoints
+ ## progress bar
+ - Endpoints
  - [ ] /
  - [ ] /users/
-       
-​- Database
+
+ - Database
  - [ ] Skeleton for DB
  - [ ] Scheme for users
 
-​- Telegram Bot
+ - Telegram Bot
  - [ ] Skeleton for Bot
  - [ ] Account verification
 
