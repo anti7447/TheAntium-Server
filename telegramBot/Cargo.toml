@@ -1,0 +1,8 @@
+[package]
+name = "telegramBot"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+teloxide = { version = "0.15.0", features = ["macros"] }
+tokio = { version = "1.45.1", features = ["full"] }
