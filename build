@@ -1,0 +1,19 @@
+#!/bin/bash
+
+read -n 1 -s -p "(c)ompile, (r)un, (t)est, (d)ebug" key
+echo
+
+case "$key" in
+  c)
+    cargo build --release
+    ;;
+  r)
+    cargo run --release
+    ;;
+  t)
+    cargo test --all-targets
+    ;;
+  d)
+    cargo run
+    ;;
+esac
