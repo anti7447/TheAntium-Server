@@ -44,8 +44,7 @@ async fn increment_state_counter<B>(
   next: Next<B>,
 ) -> Result<ServiceResponse<B>, Error>
 where
-  B: MessageBody,
-{
+  B: MessageBody {
   if let Some(state) = req.app_data::<web::Data<AntiumState>>() {
     state.counter.fetch_add(1, Ordering::Relaxed);
   }
@@ -67,8 +66,17 @@ async fn create_user(
   user_data: web::Json<User>,
   db: web::Data<UserDatabase>
 ) -> impl Responder {
-  let mut db = db.lock().unwrap();
-  let new_id = db.keys().max().unwrap_or(&0) + 1;
+
+  let mut db = match db.lock() {
+    Ok(db) => db,
+    Err(err) => err.into_inner()
+  };
+
+  let new_id = match db.keys().max() {
+    Some(id) => *id,
+    None => 1
+  };
+
   let name = user_data.name.clone();
   db.insert(new_id, user_data.into_inner());
   HttpResponse::Created().json(CreateUserResponse {
@@ -92,8 +100,13 @@ async fn get_user(
   user_id: web::Path<u64>,
   db: web::Data::<UserDatabase>
 ) -> Result<impl Responder, actix_web::Error> {
+
   let user_id = user_id.into_inner();
-  let db = db.lock().unwrap();
+
+  let db = match db.lock() {
+    Ok(db) => db,
+    Err(err) => err.into_inner()
+  };
 
   match db.get(&user_id) {
     Some(user_data) => Ok(HttpResponse::Ok().json(user_data)),
