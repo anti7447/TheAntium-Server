@@ -8,27 +8,37 @@
  - [ ] GET    /auth/user (current user info)
 
  - [ ] GET    /users (for admins)
- - [ ] POST   /users
  - [ ] GET    /users/[0-9a-f]
- - [ ] PUT    /users/[0-9a-f]
- - [ ] PATCH  /users/[0-9a-f]
- - [ ] DELETE /users/[0-9a-f]
  - [ ] GET    /users/[0-9a-f]/posts
 
  - [ ] GET    /posts
- - [ ] POST   /posts
  - [ ] GET    /posts/[o-9a-f]
- - [ ] PUT    /posts/[o-9a-f]
- - [ ] PATCH  /posts/[o-9a-f]
- - [ ] DELETE /posts/[o-9a-f]
 
- - [ ] POST   /posts/[0-9a-f]/comments
  - [ ] GET    /posts/[o-9a-f]/comments/[0-9a-f]
- - [ ] PUT    /posts/[o-9a-f]/comments/[0-9a-f]
- - [ ] PATCH  /posts/[0-9a-f]/comments/[0-9a-f]
- - [ ] DELETE /posts/[0-9a-f]/comments/[0-9a-f]
 
- - [ ]        /api/v1/verify
+ - [ ] POST   /api/v1/verify
+
+ - [ ] GET    /api/v1/users (for admins)
+ - [ ] POST   /api/v1/users
+ - [ ] GET    /api/v1/users/[0-9a-f]
+ - [ ] PUT    /api/v1/users/[0-9a-f]
+ - [ ] PATCH  /api/v1/users/[0-9a-f]
+ - [ ] DELETE /api/v1/users/[0-9a-f]
+ - [ ] GET    /api/v1/users/[0-9a-f]/posts
+
+ - [ ] GET    /api/v1/posts
+ - [ ] POST   /api/v1/posts
+ - [ ] GET    /api/v1/posts/[o-9a-f]
+ - [ ] PUT    /api/v1/posts/[o-9a-f]
+ - [ ] PATCH  /api/v1/posts/[o-9a-f]
+ - [ ] DELETE /api/v1/posts/[o-9a-f]
+
+ - [ ] POST   /api/v1/posts/[0-9a-f]/comments
+ - [ ] GET    /api/v1/posts/[o-9a-f]/comments/[0-9a-f]
+ - [ ] PUT    /api/v1/posts/[o-9a-f]/comments/[0-9a-f]
+ - [ ] PATCH  /api/v1/posts/[0-9a-f]/comments/[0-9a-f]
+ - [ ] DELETE /api/v1/posts/[0-9a-f]/comments/[0-9a-f]
+
  - [ ] GET    /wiki/
  - [ ] GET    /wiki/*
 
