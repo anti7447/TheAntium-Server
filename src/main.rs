@@ -1,11 +1,12 @@
 mod api;
 mod database;
+mod db;
 
 use actix_web::{App, HttpResponse, HttpServer, Responder, error::ErrorNotFound, web};
 use api::post_verify;
 use database::init_db;
 use serde::{Deserialize, Serialize};
-use sqlx::sqlite::{SqliteConnectOptions, SqlitePool};
+use sqlx::sqlite::{Sqlite, SqliteConnectOptions, SqlitePool};
 use std::{
     collections::HashMap,
     sync::{Mutex, atomic::AtomicU64},
@@ -111,6 +112,7 @@ async fn main() -> std::io::Result<()> {
                     // .service(web::scope("/users"))
                     .service(post_verify), // .route("/verify", web::post().to(api::post_verify)),
             )
+            .service(api::get_scope())
         // .service(index)
         // .service(create_user)
         // .service(get_antium_state)
@@ -120,3 +122,22 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
+// =======
+
+// #[actix_web::main]
+// async fn main() -> std::io::Result<()> {
+//     db::init("data.db").await;
+//     sqlx::query(include_str!("db/sql/create.sql"))
+//         .execute(db::get())
+//         .await
+//         .expect("Failed to execute creation SQL");
+//     HttpServer::new(|| {
+//         App::new()
+//             .app_data(web::Data::new(db::get().clone()))
+//             .service(api::get_scope())
+//     })
+//     .bind(("127.0.0.1", 8080))?
+//     .run()
+//     .await
+// }
+// >>>>>>> basic_server
