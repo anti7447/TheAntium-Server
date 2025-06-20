@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS Users (
     banner_url TEXT,
     password_hash TEXT NOT NULL,
     salt TEXT NOT NULL,
+    token TEXT UNIQUE,
     telegram_id INTEGER,
     banned BOOLEAN NOT NULL DEFAULT 0,
     role TEXT NOT NULL DEFAULT 'default' CHECK (role IN ('default', 'moderator', 'admin')),

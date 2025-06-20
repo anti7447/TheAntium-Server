@@ -6,7 +6,7 @@ use actix_web::{App, HttpResponse, HttpServer, Responder, error::ErrorNotFound, 
 use api::post_verify;
 use database::init_db;
 use serde::{Deserialize, Serialize};
-use sqlx::sqlite::{Sqlite, SqliteConnectOptions, SqlitePool};
+use sqlx::sqlite::{SqliteConnectOptions, SqlitePool, SqlitePoolOptions};
 use std::{
     collections::HashMap,
     sync::{Mutex, atomic::AtomicU64},
@@ -15,7 +15,7 @@ use std::{
 const ADDRESS: &str = "127.0.0.1";
 const PORT: u16 = 8080;
 
-type UserDatabase = Mutex<HashMap<u64, User>>;
+// type UserDatabase = Mutex<HashMap<u64, User>>;
 
 // #[derive(Serialize, Deserialize)]
 struct AntiumState {
@@ -95,13 +95,19 @@ async fn main() -> std::io::Result<()> {
     let options = SqliteConnectOptions::new()
         .filename("database.db")
         .create_if_missing(true);
-    let pool = SqlitePool::connect_with(options).await.unwrap();
+    // let pool = SqlitePool::connect_with(options).await.unwrap();
+    let pool = SqlitePoolOptions::new()
+        .max_connections(5)
+        .connect_with(options)
+        // .connect(&format!("sqlite://{}", file))
+        .await
+        .unwrap();
 
     init_db(&pool).await;
 
     let state = web::Data::new(AntiumState {
         counter: AtomicU64::new(0),
-        pool: pool,
+        pool,
     });
     HttpServer::new(move || {
         App::new()

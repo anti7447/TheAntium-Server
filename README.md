@@ -45,6 +45,7 @@
  - Database
  - [ ] Skeleton for DB
  - [ ] Scheme for users
+ - [ ] Move database file to binary directory
 
  - Telegram Bot
  - [ ] Skeleton for Bot
