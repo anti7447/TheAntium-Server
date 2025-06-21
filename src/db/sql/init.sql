@@ -1,6 +1,7 @@
 -- Users table
 CREATE TABLE IF NOT EXISTS Users (
-    tag TEXT PRIMARY KEY CHECK (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tag TEXT UNIQUE CHECK (
         length (tag) <= 32
         AND tag GLOB '[0-1a-zA-Z]*'
     ),
@@ -8,7 +9,6 @@ CREATE TABLE IF NOT EXISTS Users (
     avatar_url TEXT,
     banner_url TEXT,
     password_hash TEXT NOT NULL,
-    salt TEXT NOT NULL,
     token TEXT UNIQUE,
     telegram_id INTEGER,
     banned BOOLEAN NOT NULL DEFAULT 0,

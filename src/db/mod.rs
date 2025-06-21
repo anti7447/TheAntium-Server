@@ -1,64 +1,75 @@
-use argon2::password_hash;
-use sqlx::sqlite::{SqliteConnectOptions, SqlitePool, SqlitePoolOptions};
+use actix_web::Result;
+use sqlx::{error::{DatabaseError, ErrorKind}, sqlite::{SqliteConnectOptions, SqlitePoolOptions}, Error};
+use core::str;
 use std::{
-    fs,
-    sync::{Mutex, OnceLock},
+    sync::OnceLock,
 };
 
-pub async fn init_db(pool: &SqlitePool) {
-    sqlx::query(include_str!("./sql/init.sql"))
-        .execute(pool)
-        .await
-        .unwrap();
+use crate::db;
+
+pub mod user;
+
+pub type Pool = sqlx::SqlitePool;
+pub type QueryResult = sqlx::sqlite::SqliteQueryResult;
+pub type ConnectOptions = SqliteConnectOptions;
+pub type PoolOptions = SqlitePoolOptions;
+
+
+pub enum DatabaseResult {
+    Ok(QueryResult),
+    UnknownDatabaseError(Box<dyn DatabaseError>),
+    CheckViolation(Box<dyn DatabaseError>),
+    UniqueViolation(Box<dyn DatabaseError>),
+    ForeignKeyViolation(Box<dyn DatabaseError>),
+    NotNullViolation(Box<dyn DatabaseError>),
+    UnknownError(sqlx::Error)
 }
 
-pub async fn create_user(
-    pool: &SqlitePool,
-    tag: String,
-    username: String,
-    password_hash: String,
-    token: String,
-) -> Result<(), sqlx::Error> {
-    let res = sqlx::query(include_str!("./sql/user/create.sql"))
-        .bind(tag)
-        .bind(username)
-        .bind("https://theantium.fun/avatars/default") // avatar_url
-        .bind("https://theantium.fun/banners/default") // banner_url
-        .bind(password_hash)
-        .bind("salt") // salt
-        .bind(token)
-        .bind(0) // telegram_id
-        .execute(pool)
-        .await;
 
+pub fn wrap(res: Result<QueryResult, Error>) -> DatabaseResult {
     match res {
-        Ok(_) => Ok(()),
-        Err(err) => Err(err),
+        Ok(qr) => DatabaseResult::Ok(qr),
+        Err(error) => match error {
+            Error::Database(db_error) => {
+                let kind = db_error.kind();
+                match kind {
+                    ErrorKind::CheckViolation => DatabaseResult::CheckViolation(db_error),
+                    ErrorKind::UniqueViolation => DatabaseResult::UniqueViolation(db_error),
+                    ErrorKind::ForeignKeyViolation => DatabaseResult::ForeignKeyViolation(db_error),
+                    ErrorKind::NotNullViolation => DatabaseResult::NotNullViolation(db_error),
+                    _ => DatabaseResult::UnknownDatabaseError(db_error),
+                }
+            }
+            other => DatabaseResult::UnknownError(other),
+        },
     }
 }
 
-// static DB_POOL: OnceLock<SqlitePool> = OnceLock::new();
 
-// pub async fn init(file: &str) {
-//     let options = SqliteConnectOptions::new()
-//         .filename("database.db")
-//         .create_if_missing(true);
-//     // let pool = SqlitePool::connect_with(options).await;
+static DB_POOL: OnceLock<Pool> = OnceLock::new();
 
-//     let pool = SqlitePoolOptions::new()
-//         .max_connections(5)
-//         .connect_with(options)
-//         // .connect(&format!("sqlite://{}", file))
-//         .await;
+pub async fn init(file: &str) {
+    let options = ConnectOptions::new()
+        .filename(file)
+        .create_if_missing(true);
 
-//     let _ = match pool {
-//         Ok(pool_) => DB_POOL.set(pool_),
-//         Err(error) => panic!("Failed to connect to db: {}", error),
-//     };
+    let pool = PoolOptions::new()
+        .max_connections(5)
+        .connect_with(options)
+        .await
+        .expect("Failed to connect to db");
 
-//     println!("Connected to database!");
-// }
 
-// pub fn get() -> &'static SqlitePool {
-//     return DB_POOL.get().expect("Not initialized");
-// }
+    sqlx::query(include_str!("sql/init.sql"))
+            .execute(&pool)
+            .await
+            .expect("Failed to execute startup SQL query");
+
+    DB_POOL.set(pool);
+
+    println!("Connected to database!");
+}
+
+pub fn get() -> &'static Pool {
+    return DB_POOL.get().expect("Not initialized");
+}

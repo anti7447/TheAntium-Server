@@ -1,35 +1,48 @@
+use core::str;
+
 use actix_web::{HttpRequest, HttpResponse, Responder, body::BoxBody};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
-pub struct User {
-    pub tag: String,
-    pub username: Option<String>,
-    pub avatar_url: Option<String>,
-    pub banner_url: Option<String>,
-    pub password_hash: Option<String>,
-    pub salt: Option<String>,
-    pub token: String,
-    pub telegram_id: Option<u64>,
-    pub banned: bool,
-    pub role: String,
-    pub is_legend: bool,
-    pub created_at: u64,
-    pub updated_at: u64,
+pub struct UserFull {
+    tag: String,
+    username: String,
+    avatar_url: Option<String>,
+    banner_url: Option<String>,
+    password_hash: Option<String>,
+    salt: Option<String>,
+    token: String,
+    telegram_id: Option<u64>,
+    banned: bool,
+    role: String,
+    created_at: u64,
+    updated_at: u64,
 }
 
-// #[derive(Serialize, Deserialize)]
-// pub struct User {
-//     tag: String,
-//     username: String,
-//     avatar_url: Option<String>,
-//     banner_url: Option<String>,
-//     banned: bool,
-//     role: String,
-//     is_legend: bool,
-//     created_at: u64,
-//     last_login_at: u64,
-// }
+#[derive(Serialize)]
+pub struct UserPublicView {
+    tag: String,
+    username: String,
+    avatar_url: Option<String>,
+    banner_url: Option<String>,
+    banned: bool,
+    role: String,
+    created_at: u64
+}
+
+impl From<UserFull> for UserPublicView {
+    fn from(user: UserFull) -> Self {
+        UserPublicView {
+            tag: user.tag,
+            username: user.username,
+            avatar_url: user.avatar_url,
+            banner_url: user.banner_url,
+            banned: user.banned,
+            role: user.role,
+            created_at: user.created_at,
+        }
+    }
+}
 
 #[derive(Serialize)]
 pub struct Post {}
