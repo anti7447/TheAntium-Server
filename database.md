@@ -14,6 +14,7 @@ Users:
 
 Posts:
 - id: primary key
+- author_id
 - name: VAR(256)
 - content: VAR(65536)
 - created_at

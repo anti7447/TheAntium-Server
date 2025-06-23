@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS Users (
 -- Posts table
 CREATE TABLE IF NOT EXISTS Posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    author_id INTEGER NOT NULL,
     name TEXT CHECK (length (name) <= 256),
     content TEXT CHECK (length (content) <= 65536),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
