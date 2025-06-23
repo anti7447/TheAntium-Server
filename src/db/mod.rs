@@ -9,6 +9,7 @@ use std::sync::OnceLock;
 
 use crate::db;
 
+pub mod post;
 pub mod user;
 
 pub type Pool = sqlx::SqlitePool;

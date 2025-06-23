@@ -19,7 +19,7 @@
  - [ ] POST   /api/v1/verify
 
  - [ ] GET    /api/v1/users (for admins)
- - [ ] POST   /api/v1/users
+ - [x] POST   /api/v1/users
  - [ ] GET    /api/v1/users/[0-9a-f]
  - [ ] PUT    /api/v1/users/[0-9a-f]
  - [ ] PATCH  /api/v1/users/[0-9a-f]
