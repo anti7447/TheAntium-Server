@@ -27,7 +27,7 @@ pub struct UserPublicView {
     banner_url: Option<String>,
     banned: bool,
     role: String,
-    created_at: u64
+    created_at: u64,
 }
 
 impl From<UserFull> for UserPublicView {
@@ -50,10 +50,10 @@ pub struct Post {}
 #[derive(Serialize)]
 pub struct Comment {}
 
-impl Responder for User {
-    type Body = BoxBody;
+// impl Responder for User {
+//     type Body = BoxBody;
 
-    fn respond_to(self, _req: &HttpRequest) -> HttpResponse<Self::Body> {
-        todo!()
-    }
-}
+//     fn respond_to(self, _req: &HttpRequest) -> HttpResponse<Self::Body> {
+//         todo!()
+//     }
+// }

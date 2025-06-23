@@ -1,9 +1,11 @@
 use actix_web::Result;
-use sqlx::{error::{DatabaseError, ErrorKind}, sqlite::{SqliteConnectOptions, SqlitePoolOptions}, Error};
 use core::str;
-use std::{
-    sync::OnceLock,
+use sqlx::{
+    Error,
+    error::{DatabaseError, ErrorKind},
+    sqlite::{SqliteConnectOptions, SqlitePoolOptions},
 };
+use std::sync::OnceLock;
 
 use crate::db;
 
@@ -14,7 +16,6 @@ pub type QueryResult = sqlx::sqlite::SqliteQueryResult;
 pub type ConnectOptions = SqliteConnectOptions;
 pub type PoolOptions = SqlitePoolOptions;
 
-
 pub enum DatabaseResult {
     Ok(QueryResult),
     UnknownDatabaseError(Box<dyn DatabaseError>),
@@ -22,9 +23,8 @@ pub enum DatabaseResult {
     UniqueViolation(Box<dyn DatabaseError>),
     ForeignKeyViolation(Box<dyn DatabaseError>),
     NotNullViolation(Box<dyn DatabaseError>),
-    UnknownError(sqlx::Error)
+    UnknownError(sqlx::Error),
 }
-
 
 pub fn wrap(res: Result<QueryResult, Error>) -> DatabaseResult {
     match res {
@@ -45,13 +45,10 @@ pub fn wrap(res: Result<QueryResult, Error>) -> DatabaseResult {
     }
 }
 
-
 static DB_POOL: OnceLock<Pool> = OnceLock::new();
 
 pub async fn init(file: &str) {
-    let options = ConnectOptions::new()
-        .filename(file)
-        .create_if_missing(true);
+    let options = ConnectOptions::new().filename(file).create_if_missing(true);
 
     let pool = PoolOptions::new()
         .max_connections(5)
@@ -59,13 +56,12 @@ pub async fn init(file: &str) {
         .await
         .expect("Failed to connect to db");
 
-
     sqlx::query(include_str!("sql/init.sql"))
-            .execute(&pool)
-            .await
-            .expect("Failed to execute startup SQL query");
+        .execute(&pool)
+        .await
+        .expect("Failed to execute startup SQL query");
 
-    DB_POOL.set(pool);
+    let _ = DB_POOL.set(pool);
 
     println!("Connected to database!");
 }
