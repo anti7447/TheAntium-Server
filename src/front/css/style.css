@@ -1,0 +1,83 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background: linear-gradient(to bottom, #011023, #5381b2) no-repeat;
+    color: white;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    /* font-size: 38em; */
+    /* font-weight: 38; */
+    font-style: normal;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+}
+
+main {
+    width: 100%;
+    height: 80%;
+    display: flex; /* Добавляем flex для main */
+    justify-content: center;
+    align-items: center;
+}
+
+.login_logo {
+    margin-bottom: 50%;
+    color: #c2e8ff;
+    font-size: 3em;
+    display: flex; /* Добавляем flex для main */
+    justify-content: center;
+    align-items: center;
+}
+
+#login-windows {
+    width: 30%;
+    max-width: 300px;
+    /* margin: 0 auto; */
+    /* position: relative; */
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+}
+
+.input-wrapper {
+    margin-bottom: 5%;
+}
+
+input[type="text"] {
+    /* Основные стили для input */
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #fff; /* Тонкая линия снизу */
+    padding: 10px;
+    width: 100%;
+    font-size: 16px;
+    color: #fff;
+
+    /* Плавные переходы */
+    transition: all 0.3s ease;
+}
+
+/* Стили для состояния фокуса */
+input[type="text"]:focus {
+    outline: none;
+    color: #c2e8ff;
+    border-color: #007bff;
+}
+
+/* Стили для placeholder */
+input[type="text"]::placeholder {
+    color: #7292bb;
+    /* opacity: 0.8; */
+    transition: opacity 0.3s ease;
+}
+
+/* Дополнительные эффекты при фокусе */
+input[type="text"]:focus::placeholder {
+    opacity: 0;
+}
