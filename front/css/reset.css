@@ -3,6 +3,10 @@
    License: none (public domain)
 */
 
+* {
+    box-sizing: border-box;
+}
+
 html,
 body,
 div,
@@ -126,4 +130,10 @@ q:after {
 table {
     border-collapse: collapse;
     border-spacing: 0;
+}
+/* Базовый сброс стилей для всех ссылок */
+a {
+    text-decoration: none; /* Убираем подчеркивание */
+    color: inherit; /* Наследуем цвет от родительского элемента */
+    outline: none; /* Убираем контур при клике */
 }
