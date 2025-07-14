@@ -1,11 +1,17 @@
-html,
-body {
-    height: 100%;
+:root {
+    --font-color: #fff;
+    --logo-color: #c2e8ff;
+    --dark-color: #011023;
+}
+
+::selection {
+    background: rgba(250, 255, 255, 0.3);
+    /* color: #000; */
 }
 
 body {
-    background: linear-gradient(to bottom, #011023, #5381b2) no-repeat;
-    color: white;
+    background: var(--dark-color);
+    color: var(--font-color);
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
     /* font-size: 38em; */
@@ -13,147 +19,153 @@ body {
     font-style: normal;
 }
 
-footer {
+header {
+    /* max-width: 1000px; */
+    /* display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem; */
+}
+
+/* Контейнеры */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+.container.header {
+    justify-content: space-between;
+}
+
+.container.main {
+}
+
+.project-container {
+}
+
+.logo {
+    color: var(--logo-color);
+    font-size: clamp(2rem, 3vw, 10rem);
+    cursor: default;
+}
+
+.header-nav {
+    color: var(--font-color);
+    font-size: clamp(1rem, 1.3vw, 10rem);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-a {
+    display: flex;
+    align-items: center; /* вот тут текст будет строго по центру иконки */
+    gap: 0.5rem; /* расстояние между иконкой и текстом */
+    text-decoration: none;
+}
+
+/* SVG-иконки */
+
+.forum-icon {
+    /* stroke: #3498db; */
+    width: 1em;
+    height: 0.8em;
+    stroke-width: 2;
+    fill: var(--logo-color);
+}
+
+.wiki-icon {
+    width: 1em;
+    height: 0.8em;
+    stroke: var(--logo-color);
+    stroke-width: 2;
+    stroke-linecap: "round";
+    stroke-linejoin: "round";
+}
+
+.user-icon {
+    height: 70%;
+    stroke: #5482b3;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Кнопка входа / навигации (профиль, etc.) */
+
+.user-button {
+    width: clamp(2rem, 2.8vw, 10rem);
+    height: clamp(2rem, 2.8vw, 10rem);
+    margin-left: 1rem;
+    background: var(--logo-color);
+    border-radius: 10px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* MAIN */
+
+.main-section {
+    margin: 0 auto;
+}
+/* .main-h {
+    margin: 0 auto;
+} */
+
+/* Cards */
+
+.project-card {
+    position: relative;
+    width: 220px; /* или 100% в гриде/флексе */
+    height: 300px;
+    /* background-color:; */
+    /* background: url("https://i.pinimg.com/550x/87/ad/4a/87ad4a1150e6d03d624d9a4f036e97db.jpg")
+        center/cover no-repeat; */
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+}
+
+.project-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Градиент поверх картинки */
+.project-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #4c78a5, transparent);
+}
+
+/* затемнённая градиентная плашка снизу */
+.project-card-overlay {
     position: absolute;
     bottom: 0;
-}
-
-main {
+    left: 0;
     width: 100%;
-    height: 80%;
-    display: flex; /* Добавляем flex для main */
-    justify-content: center;
-    align-items: center;
+    padding: 1rem;
+    /* background: linear-gradient(to top, #4c78a5, transparent); */
+    color: white;
+    font-size: 1rem;
 }
 
-.login_logo {
-    margin-bottom: 50%;
-    color: #c2e8ff;
-    font-size: 3em;
-    display: flex; /* Добавляем flex для main */
-    justify-content: center;
-    align-items: center;
-}
-
-#login-windows {
-    width: 30%;
-    max-width: 300px;
-    margin: 0 10px;
-    /* position: relative; */
-    /* display: flex; */
-    /* justify-content: center; */
-    /* align-items: center; */
-}
-
-.login-windows_input-wrapper {
-    margin-bottom: 5%;
-}
-
-input[type="text"] {
-    /* Основные стили для input */
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #fff; /* Тонкая линия снизу */
-    padding: 10px 0;
+.project-card-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    font-size: 16px;
-    color: #fff;
-
-    /* Плавные переходы */
-    transition: all 0.3s ease;
-}
-
-/* Стили для состояния фокуса */
-input[type="text"]:focus {
-    outline: none;
-    color: #c2e8ff;
-    border-color: #007bff;
-}
-
-/* Стили для placeholder */
-input[type="text"]::placeholder {
-    color: #7292bb;
-    /* opacity: 0.8; */
-    transition: opacity 0.3s ease;
-}
-
-/* Дополнительные эффекты при фокусе */
-input[type="text"]:focus::placeholder {
-    opacity: 0;
-}
-
-/* Базовые стили для кнопок */
-.button {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.2s ease;
-    margin: 0 auto;
-}
-
-/* Контейнер для кнопок */
-.login-windows_button-container {
-    display: flex;
-    /* gap: 20px;
-    margin-top: 20px; */
-}
-
-/* Стили для первичной кнопки */
-.button.primary {
-    background-color: #5482b3;
     color: white;
-}
-
-.button.primary:hover {
-    background-color: #0069d9;
-}
-
-.button.primary:active {
-    background-color: #0056b3;
-}
-
-/* Стили для вторичной кнопки */
-.button.secondary {
-    background-color: #7191b9;
-    color: white;
-}
-
-.button.secondary:hover {
-    background-color: rgba(0, 123, 255, 0.1);
-}
-
-.button.secondary:active {
-    background-color: rgba(0, 123, 255, 0.2);
-}
-
-.a.forgot-pass {
-    margin-top: 3px;
-    font-size: 0.85rem;
-}
-
-.a.havnt-account {
-    margin: 0 auto;
-    margin-top: 3px;
-    font-size: 0.85rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.a,
-.a:visited {
-    color: #7292bb;
-    transition: all 0.3s ease;
-}
-
-.a:hover {
-    color: #84abdd;
-    transition: all 0.3s ease;
-}
-
-.a:active {
-    color: #5777a1;
-    transition: all 0.3s ease;
+    padding: 1rem;
+    z-index: 1;
 }
