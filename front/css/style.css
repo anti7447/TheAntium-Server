@@ -352,8 +352,9 @@ div.post-card-text {
 }
 
 /* 📱 Для экранов до 600px шириной */
-@media (max-width: 600px) {
+@media (max-width: 630px) {
     .container.footer {
+        padding-top: 30px;
         flex-direction: column;
         align-items: center;
     }
