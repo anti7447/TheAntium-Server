@@ -1,9 +1,13 @@
 mod api;
 mod db;
+mod pages;
 
 use api::post_verify;
 use api::users::post_users;
 
+use pages::main_page;
+
+use actix_files as fs;
 use actix_web::{
     App, HttpServer,
     middleware::Logger,
@@ -25,6 +29,8 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(Data::new(db::get().clone()))
             .app_data(Data::new(Argon2::default()))
+            .service(fs::Files::new("/assets", "./front/assets"))
+            .service(main_page)
             .service(
                 web::scope("/api/v1")
                     .service(post_users)
