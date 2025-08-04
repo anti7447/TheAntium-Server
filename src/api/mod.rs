@@ -6,6 +6,13 @@ pub mod users;
 use actix_web::{HttpResponse, Responder, post, web};
 use serde::{Deserialize, Serialize};
 
+#[derive(Serialize)]
+pub struct ErrorResponse {
+    error: String,
+    message: String,
+    status: u16,
+}
+
 #[derive(Deserialize, Serialize)]
 pub struct Info {
     user_id: u64,

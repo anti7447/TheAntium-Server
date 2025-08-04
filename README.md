@@ -4,6 +4,7 @@
  - [ ] GET    /
 
  - [ ] POST   /auth/login
+ - [ ] POST   /auth/refresh
  - [ ] DELETE /auth/logout
  - [ ] GET    /auth/user (current user info)
 
@@ -15,6 +16,11 @@
  - [ ] GET    /posts/[o-9a-f]
 
  - [ ] GET    /posts/[o-9a-f]/comments/[0-9a-f]
+
+ - [ ] GET    /assets (static CSS, JS, imgs and other for frontend)
+ - [ ] GET    /public/avatars  (static avatar's files)
+ - [ ] GET    /public/banners  (static avatar's files)
+ - [ ] GET    /public/postimgs (static for media content on posts)
 
  - [ ] POST   /api/v1/verify
 

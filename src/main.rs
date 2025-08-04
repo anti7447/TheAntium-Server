@@ -1,6 +1,8 @@
 mod api;
+mod auth;
 mod db;
 mod pages;
+mod security;
 
 use api::post_verify;
 use api::users::post_users;
@@ -31,6 +33,11 @@ async fn main() -> std::io::Result<()> {
             .app_data(Data::new(Argon2::default()))
             .service(fs::Files::new("/assets", "./front/assets"))
             .service(main_page)
+            .service(
+                web::scope("/auth")
+                    .service(auth::post_login)
+                    .service(auth::delete_logout),
+            )
             .service(
                 web::scope("/api/v1")
                     .service(post_users)

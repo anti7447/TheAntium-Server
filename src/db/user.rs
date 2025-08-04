@@ -1,7 +1,6 @@
-use argon2::password_hash::{SaltString, rand_core::OsRng};
-use argon2::{Argon2, PasswordHasher};
-use rand::Rng;
+use chrono::{DateTime, Utc};
 
+use crate::api::types::UserFull;
 use crate::db::Pool;
 
 pub async fn create(
@@ -9,13 +8,50 @@ pub async fn create(
     tag: &String,
     username: &String,
     password_hash: &String,
-    token: &String,
 ) -> Result<sqlx::sqlite::SqliteQueryResult, sqlx::Error> {
     sqlx::query(include_str!("sql/user/register.sql"))
         .bind(tag) // Tag
         .bind(username) // Username
         .bind(password_hash) // Password Hash
-        .bind(token) // Token
+        // .bind(token) // Token
         .execute(pool)
+        .await
+}
+
+pub async fn get_id(
+    pool: &Pool,
+    tag: &String,
+    password_hash: &String,
+) -> Result<Option<u32>, sqlx::Error> {
+    sqlx::query_scalar(include_str!("sql/user/get_id.sql"))
+        .bind(tag)
+        .bind(password_hash)
+        .fetch_optional(pool)
+        .await
+}
+
+pub async fn get_user(
+    pool: &Pool,
+    tag: &String,
+    password_hash: &String,
+) -> Result<Option<UserFull>, sqlx::Error> {
+    sqlx::query_as(include_str!("sql/user/get_user.sql"))
+        .bind(tag)
+        .bind(password_hash)
+        .fetch_optional(pool)
+        .await
+}
+
+pub async fn create_session(
+    pool: &Pool,
+    user_id: &u32,
+    device_name: &String,
+    expires_at: &DateTime<Utc>,
+) -> Result<u32, sqlx::Error> {
+    sqlx::query_scalar(include_str!("sql/user/create_session.sql"))
+        .bind(user_id)
+        .bind(device_name)
+        .bind(expires_at)
+        .fetch_one(pool)
         .await
 }

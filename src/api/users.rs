@@ -4,10 +4,10 @@ use argon2::{
     password_hash::{SaltString, rand_core::OsRng},
 };
 use argon2::{Argon2, PasswordHasher};
-use rand::{self, Rng};
 use serde::{Deserialize, Serialize};
 use sqlx::Error;
 
+use crate::api::ErrorResponse;
 use crate::db::{self, Pool};
 
 #[derive(Deserialize)]
@@ -19,9 +19,9 @@ pub struct UserCreateRequest {
 
 #[derive(Serialize)]
 pub struct UserCreateResponse {
+    id: u32,
     tag: String,
     username: String,
-    token: String,
 }
 
 // pub fn get_scope() -> actix_web::Scope {
@@ -39,33 +39,44 @@ pub async fn post_users(
         password,
     } = create.into_inner();
 
-    let token: String = rand::rng()
-        .sample_iter(&rand::distr::Alphanumeric)
-        .take(64)
-        .map(char::from)
-        .collect();
+    // let token = get_token(sub, secs);
     let passhash: String = Argon2::default()
         .hash_password(password.as_bytes(), &SaltString::generate(&mut OsRng))
-        .expect("damn")
+        .unwrap()
         .to_string();
 
-    let res = db::user::create(&pool, &tag, &username, &passhash, &token).await;
+    let res = db::user::create(&pool, &tag, &username, &passhash).await;
 
     match res {
-        Ok(_) => HttpResponse::Created().json(UserCreateResponse {
-            tag,
-            username,
-            token,
-        }),
+        Ok(_) => HttpResponse::Created().finish(),
         Err(e) => match e {
             Error::Database(db) => match db.kind() {
-                sqlx::error::ErrorKind::CheckViolation => HttpResponse::BadRequest().finish(),
+                sqlx::error::ErrorKind::CheckViolation => HttpResponse::BadRequest()
+                    .json(ErrorResponse {
+                    error: "BadRequest".to_string(),
+                    message:
+                        "Check: tag <= 32 characters and consists only of Latin letters and numbers"
+                            .to_string(),
+                    status: 400,
+                }),
                 sqlx::error::ErrorKind::UniqueViolation => {
-                    HttpResponse::Conflict().body("User already exists")
+                    HttpResponse::Conflict().json(ErrorResponse {
+                        error: "Conflict".to_string(),
+                        message: "User already exists".to_string(),
+                        status: 409,
+                    })
                 }
-                _ => HttpResponse::InternalServerError().finish(),
+                _ => HttpResponse::InternalServerError().json(ErrorResponse {
+                    error: "InternalServerError".to_string(),
+                    message: "Something in DB-request ¯\\_(ツ)_/¯".to_string(),
+                    status: 500,
+                }),
             },
-            _ => HttpResponse::InternalServerError().finish(),
+            _ => HttpResponse::InternalServerError().json(ErrorResponse {
+                error: "InternalServerError".to_string(),
+                message: "¯\\_(ツ)_/¯".to_string(),
+                status: 500,
+            }),
         },
     }
 }
