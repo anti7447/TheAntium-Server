@@ -76,3 +76,13 @@ pub struct Comment {}
 //         todo!()
 //     }
 // }
+
+#[derive(Serialize, Deserialize, FromRow, Debug)]
+pub struct Session {
+    pub id: u32,
+    pub user_id: u32,
+    pub device_name: String,
+    pub created_at: DateTime<Utc>,
+    pub expires_at: DateTime<Utc>,
+    pub is_valid: bool,
+}

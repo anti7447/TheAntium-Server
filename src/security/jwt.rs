@@ -34,7 +34,7 @@ pub fn verify_token(token: String) -> Result<Claims, Error> {
     // `token` is a struct with 2 fields: `header` and `claims` where `claims` is your own struct.
     let token = decode::<Claims>(
         &token,
-        &DecodingKey::from_secret("secret".as_ref()),
+        &DecodingKey::from_secret(include_bytes!("../../secret.pem")),
         &Validation::default(),
     )?;
 

@@ -9,6 +9,7 @@ use sqlx::Error;
 use crate::db;
 use crate::db::Pool;
 use crate::security::jwt::get_token;
+use crate::security::jwt::verify_token;
 
 use crate::api::types::*;
 
@@ -22,6 +23,16 @@ pub struct SignRequest {
 pub struct SignRespond {
     user: UserPublicView,
     session_token: String,
+    user_token: String,
+}
+
+#[derive(Deserialize)]
+pub struct RefreshRequest {
+    session_token: String,
+}
+
+#[derive(Serialize)]
+pub struct RefreshRespond {
     user_token: String,
 }
 
@@ -83,7 +94,7 @@ pub async fn post_login(
         },
     };
 
-    let session_token_res = get_token(session_id.to_string(), now, session_exp);
+    let session_token_res = get_token("s".to_owned() + session_id.to_string().as_str(), now, session_exp);
     let session_token = match session_token_res {
         Ok(token) => token,
         Err(e) => {
@@ -92,7 +103,7 @@ pub async fn post_login(
         }
     };
 
-    let user_token_res = get_token(user.id.to_string(), now, user_exp);
+    let user_token_res = get_token("u".to_owned() + user.id.to_string().as_str(), now, user_exp);
     let user_token = match user_token_res {
         Ok(token) => token,
         Err(e) => {
@@ -109,8 +120,80 @@ pub async fn post_login(
 }
 
 #[post("/refresh")]
-pub async fn post_refresh() -> impl Responder {
-    HttpResponse::Ok().body("logIN")
+pub async fn post_refresh(
+    pool: web::Data<Pool>,
+    data: web::Json<RefreshRequest>,
+) -> impl Responder {
+    let RefreshRequest { session_token} = data.into_inner();
+    let now = Utc::now();
+    let user_exp = now + Duration::minutes(15);
+
+    let claims = match verify_token(session_token) {
+        Ok(t) => t,
+        Err(e) => {
+            match e.kind() {
+                jsonwebtoken::errors::ErrorKind::InvalidToken => {
+                    return HttpResponse::BadRequest()
+                        .body(format!("It isn's a token"));
+                }
+                jsonwebtoken::errors::ErrorKind::ExpiredSignature => {
+                    return HttpResponse::BadRequest()
+                        .body(format!("Token has expired"));
+                }
+                _ => {
+                    return HttpResponse::InternalServerError()
+                        .body(format!("idk, {e}\nPLease, make a bug report (sid)"));
+                }
+            }
+        }
+    };
+
+    // Session ID as &str
+    let sid_s = &claims.sub[1..];
+
+    debug!("{:#?}\n{:?}", claims, sid_s);
+
+    if !claims.sub.starts_with("s") {
+        return HttpResponse::BadRequest()
+            .body(format!("It's not session token, bruh"));
+    }
+
+    let session_id: u32 = match sid_s.parse() {
+        Ok(id) => id,
+        Err(e) => {
+            return HttpResponse::InternalServerError()
+                .body(format!("idk, {e}\nPLease, make a bug report (sid_u)"));
+        }
+    };
+
+    
+    let session_res =
+        db::user::get_session_lite(&pool, &session_id).await;
+    let (user_id, is_valid) = match session_res {
+        Ok(res) => res,
+        Err(e) => match e {
+            _ => {
+                return HttpResponse::InternalServerError()
+                    .body(format!("idk, {e}\nPLease, make a bug report (rsession)"));
+            }
+        },
+    };
+
+    if !is_valid {
+        return HttpResponse::Unauthorized()
+            .body("Session ID is invalid :(");
+    }
+
+    let user_token_res = get_token("u".to_owned() + user_id.to_string().as_str(), now, user_exp);
+    let user_token = match user_token_res {
+        Ok(token) => token,
+        Err(e) => {
+            return HttpResponse::InternalServerError()
+                .body(format!("idk, {e}\nPLease, make a bug report (rut)"));
+        }
+    };
+
+    HttpResponse::Accepted().json(RefreshRespond { user_token })
 }
 
 #[delete("/logout")]

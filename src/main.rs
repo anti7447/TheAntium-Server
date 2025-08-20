@@ -11,9 +11,7 @@ use pages::main_page;
 
 use actix_files as fs;
 use actix_web::{
-    App, HttpServer,
-    middleware::Logger,
-    web::{self, Data},
+    middleware::Logger, web::{self, service, Data}, App, HttpServer
 };
 use argon2::Argon2;
 use env_logger::Env;
@@ -36,6 +34,7 @@ async fn main() -> std::io::Result<()> {
             .service(
                 web::scope("/auth")
                     .service(auth::post_login)
+                    .service(auth::post_refresh)
                     .service(auth::delete_logout),
             )
             .service(

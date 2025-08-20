@@ -1,6 +1,7 @@
 use chrono::{DateTime, Utc};
 
 use crate::api::types::UserFull;
+use crate::api::types::Session;
 use crate::db::Pool;
 
 pub async fn create(
@@ -47,6 +48,20 @@ pub async fn create_session(
         .bind(user_id)
         .bind(device_name)
         .bind(expires_at)
+        .fetch_one(pool)
+        .await
+}
+
+pub async fn get_session(pool: &Pool, id: &u32) -> Result<Session, sqlx::Error> {
+    sqlx::query_as(include_str!("sql/user/get_session.sql"))
+        .bind(id)
+        .fetch_one(pool)
+        .await
+}
+
+pub async fn get_session_lite(pool: &Pool, id: &u32) -> Result<(u32, bool), sqlx::Error> {
+    sqlx::query_as(include_str!("sql/user/get_session_lite.sql"))
+        .bind(id)
         .fetch_one(pool)
         .await
 }
