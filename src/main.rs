@@ -11,7 +11,7 @@ use pages::main_page;
 
 use actix_files as fs;
 use actix_web::{
-    middleware::Logger, web::{self, service, Data}, App, HttpServer
+    middleware::Logger, web::{self, Data}, App, HttpServer
 };
 use argon2::Argon2;
 use env_logger::Env;

@@ -65,3 +65,12 @@ pub async fn get_session_lite(pool: &Pool, id: &u32) -> Result<(u32, bool), sqlx
         .fetch_one(pool)
         .await
 }
+
+pub async fn delete_session(pool: &Pool, session_id: &u32) -> Result<(), sqlx::Error> {
+    sqlx::query(include_str!("sql/user/del_session.sql"))
+        .bind(session_id)
+        .execute(pool)
+        .await?;
+
+    Ok(())
+}

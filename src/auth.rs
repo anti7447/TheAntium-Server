@@ -27,7 +27,7 @@ pub struct SignRespond {
 }
 
 #[derive(Deserialize)]
-pub struct RefreshRequest {
+pub struct TokenRequest {
     session_token: String,
 }
 
@@ -122,9 +122,9 @@ pub async fn post_login(
 #[post("/refresh")]
 pub async fn post_refresh(
     pool: web::Data<Pool>,
-    data: web::Json<RefreshRequest>,
+    data: web::Json<TokenRequest>,
 ) -> impl Responder {
-    let RefreshRequest { session_token} = data.into_inner();
+    let TokenRequest { session_token} = data.into_inner();
     let now = Utc::now();
     let user_exp = now + Duration::minutes(15);
 
@@ -151,7 +151,7 @@ pub async fn post_refresh(
     // Session ID as &str
     let sid_s = &claims.sub[1..];
 
-    debug!("{:#?}\n{:?}", claims, sid_s);
+    // debug!("{:#?}\n{:?}", claims, sid_s);
 
     if !claims.sub.starts_with("s") {
         return HttpResponse::BadRequest()
@@ -197,8 +197,62 @@ pub async fn post_refresh(
 }
 
 #[delete("/logout")]
-pub async fn delete_logout() -> impl Responder {
-    HttpResponse::Ok().body("logout")
+pub async fn delete_logout(
+    pool: web::Data<Pool>,
+    data: web::Json<TokenRequest>,
+) -> impl Responder {
+    let TokenRequest { session_token} = data.into_inner();
+
+    let claims = match verify_token(session_token) {
+        Ok(t) => t,
+        Err(e) => {
+            match e.kind() {
+                jsonwebtoken::errors::ErrorKind::InvalidToken => {
+                    return HttpResponse::BadRequest()
+                        .body(format!("It isn's a token"));
+                }
+                jsonwebtoken::errors::ErrorKind::ExpiredSignature => {
+                    return HttpResponse::BadRequest()
+                        .body(format!("Token has expired"));
+                }
+                _ => {
+                    return HttpResponse::InternalServerError()
+                        .body(format!("idk, {e}\nPLease, make a bug report (sid)"));
+                }
+            }
+        }
+    };
+
+    // Session ID as &str
+    let sid_s = &claims.sub[1..];
+
+    // debug!("{:#?}\n{:?}", claims, sid_s);
+
+    if !claims.sub.starts_with("s") {
+        return HttpResponse::BadRequest()
+            .body(format!("It's not session token, bruh"));
+    }
+
+    let session_id: u32 = match sid_s.parse() {
+        Ok(id) => id,
+        Err(e) => {
+            return HttpResponse::InternalServerError()
+                .body(format!("idk, {e}\nPLease, make a bug report (sid_u)"));
+        }
+    };
+
+    match db::user::delete_session(&pool, &session_id).await {
+        Ok(()) => (),
+        Err(e) => match e {
+            _ => {
+                return HttpResponse::InternalServerError()
+                    .body(format!("idk, {e}\nPLease, make a bug report (rsession)"));
+            }
+        },
+    };
+
+
+    HttpResponse::Ok().finish()
 }
 
 fn get_device_name<'a>(req: &'a HttpRequest) -> Option<&'a str> {
