@@ -5,7 +5,7 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 
-#[derive(Serialize, Deserialize, FromRow)]
+#[derive(Serialize, Deserialize, FromRow, Debug)]
 pub struct UserFull {
     pub id: u32,
     pub tag: String,
@@ -55,6 +55,12 @@ impl From<UserFull> for UserPublicView {
             last_seen: None,
         }
     }
+}
+
+#[derive(Deserialize)]
+pub struct UserLoginRequest {
+    pub tag: String,
+    pub password: String,
 }
 
 #[derive(Serialize)]

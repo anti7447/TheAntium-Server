@@ -1,6 +1,6 @@
 use actix_web::{HttpRequest, HttpResponse, Responder, delete, get, post, web};
 use argon2::password_hash::{SaltString, rand_core::OsRng};
-use argon2::{Argon2, PasswordHasher};
+use argon2::{Argon2, PasswordHash, PasswordHasher, PasswordVerifier};
 use chrono::{Duration, Utc};
 use log::debug;
 use serde::{Deserialize, Serialize};
@@ -40,14 +40,8 @@ pub async fn post_login(
     let session_exp = now + Duration::days(6 * 30);
     let user_exp = now + Duration::minutes(15);
 
-    let passhash: String = Argon2::default()
-        .hash_password(password.as_bytes(), &SaltString::generate(&mut OsRng))
-        .unwrap()
-        .to_string();
-
-    debug!("{passhash}");
-
-    let user_res = db::user::get_user(&pool, &tag, &passhash).await;
+    let user_res = db::user::get_user(&pool, &tag).await;
+    debug!("{:?}", user_res);
     let user_opt = match user_res {
         Ok(user) => user,
         Err(e) => match e {
@@ -60,9 +54,22 @@ pub async fn post_login(
     let user = match user_opt {
         Some(user) => user,
         None => {
-            return HttpResponse::InternalServerError().body("invalid username or password");
+            return HttpResponse::Unauthorized().finish();
         }
     };
+
+    let hash = match PasswordHash::new(&user.password_hash) {
+        Ok(h) => h,
+        Err(_) => return HttpResponse::InternalServerError().finish(),
+    };
+
+    let status = Argon2::default()
+        .verify_password(password.as_bytes(), &hash)
+        .is_ok();
+
+    if !status {
+        HttpResponse::Unauthorized().finish();
+    }
 
     let session_id_res =
         db::user::create_session(&pool, &user.id, &device_name, &session_exp).await;

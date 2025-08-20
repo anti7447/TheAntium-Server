@@ -1,1 +1,1 @@
-SELECT * FROM Users where tag = ? and password_hash = ?;
+SELECT * FROM Users WHERE tag = ?;

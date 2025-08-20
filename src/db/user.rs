@@ -30,14 +30,9 @@ pub async fn get_id(
         .await
 }
 
-pub async fn get_user(
-    pool: &Pool,
-    tag: &String,
-    password_hash: &String,
-) -> Result<Option<UserFull>, sqlx::Error> {
+pub async fn get_user(pool: &Pool, tag: &String) -> Result<Option<UserFull>, sqlx::Error> {
     sqlx::query_as(include_str!("sql/user/get_user.sql"))
         .bind(tag)
-        .bind(password_hash)
         .fetch_optional(pool)
         .await
 }
