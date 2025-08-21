@@ -1,0 +1,70 @@
+
+a {
+    text-decoration: none; /* Убираем подчеркивание */
+    color: inherit; /* Наследуем цвет от родительского элемента */
+    outline: none; /* Убираем контур при клике */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+.container.header {
+    justify-content: space-between;
+}
+.logo {
+    width: 182px;
+    height: 88.81px;
+}
+.header-nav {
+    color: #fff;
+    font-size: clamp(2rem, 3vw, 10rem);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.nav-a {
+    display: flex;
+    align-items: center; /* вот тут текст будет строго по центру иконки */
+    gap: 0.5rem; /* расстояние между иконкой и текстом */
+    text-decoration: none;
+}
+.forum-icon {
+    /* stroke: #3498db; */
+    width: 1em;
+    height: 0.8em;
+    stroke-width: 2;
+    fill: #c2e8ff;
+}
+.wiki-icon {
+    width: 1em;
+    height: 0.8em;
+    stroke: #c2e8ff;
+    stroke-width: 2;
+    stroke-linecap: "round";
+    stroke-linejoin: "round";
+}
+
+.user-icon {
+    height: 70%;
+    stroke: #5482b3;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.user-button {
+    width: clamp(4rem, 3vw, 10rem);
+    height: clamp(4rem, 3vw, 10rem);
+    margin-left: 2rem;
+    background: #c2e8ff;
+    border-radius: 20px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
