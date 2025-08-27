@@ -1,50 +1,11 @@
-use actix_web::Result;
 use core::str;
-use sqlx::{
-    Error,
-    error::{DatabaseError, ErrorKind},
-    sqlite::{SqliteConnectOptions, SqlitePoolOptions},
-};
+use sqlx::sqlite::{SqliteConnectOptions, SqlitePoolOptions};
 use std::sync::OnceLock;
-
-use crate::db;
-
-pub mod post;
-pub mod user;
 
 pub type Pool = sqlx::SqlitePool;
 pub type QueryResult = sqlx::sqlite::SqliteQueryResult;
 pub type ConnectOptions = SqliteConnectOptions;
 pub type PoolOptions = SqlitePoolOptions;
-
-pub enum DatabaseResult {
-    Ok(QueryResult),
-    UnknownDatabaseError(Box<dyn DatabaseError>),
-    CheckViolation(Box<dyn DatabaseError>),
-    UniqueViolation(Box<dyn DatabaseError>),
-    ForeignKeyViolation(Box<dyn DatabaseError>),
-    NotNullViolation(Box<dyn DatabaseError>),
-    UnknownError(sqlx::Error),
-}
-
-pub fn wrap(res: Result<QueryResult, Error>) -> DatabaseResult {
-    match res {
-        Ok(qr) => DatabaseResult::Ok(qr),
-        Err(error) => match error {
-            Error::Database(db_error) => {
-                let kind = db_error.kind();
-                match kind {
-                    ErrorKind::CheckViolation => DatabaseResult::CheckViolation(db_error),
-                    ErrorKind::UniqueViolation => DatabaseResult::UniqueViolation(db_error),
-                    ErrorKind::ForeignKeyViolation => DatabaseResult::ForeignKeyViolation(db_error),
-                    ErrorKind::NotNullViolation => DatabaseResult::NotNullViolation(db_error),
-                    _ => DatabaseResult::UnknownDatabaseError(db_error),
-                }
-            }
-            other => DatabaseResult::UnknownError(other),
-        },
-    }
-}
 
 static DB_POOL: OnceLock<Pool> = OnceLock::new();
 

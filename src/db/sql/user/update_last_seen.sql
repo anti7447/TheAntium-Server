@@ -1,0 +1,3 @@
+UPDATE Users
+SET last_seen = CURRENT_TIMESTAMP
+WHERE id = ?;

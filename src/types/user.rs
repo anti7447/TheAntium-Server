@@ -1,9 +1,13 @@
-use core::str;
-
-use actix_web::{HttpRequest, HttpResponse, Responder, body::BoxBody};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
+
+#[derive(Deserialize)]
+pub struct UserCreateRequest {
+    pub tag: String,
+    pub username: String,
+    pub password: String,
+}
 
 #[derive(Serialize, Deserialize, FromRow, Debug)]
 pub struct UserFull {
@@ -64,15 +68,8 @@ pub struct UserLoginRequest {
 }
 
 #[derive(Serialize)]
-pub struct Post {}
-
-#[derive(Serialize)]
-pub struct Comment {}
-
-// impl Responder for User {
-//     type Body = BoxBody;
-
-//     fn respond_to(self, _req: &HttpRequest) -> HttpResponse<Self::Body> {
-//         todo!()
-//     }
-// }
+pub struct UserLoginResponse {
+    pub user: UserPublicView,
+    pub access: String,
+    pub refresh: String,
+}

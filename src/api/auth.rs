@@ -1,87 +1,84 @@
-use actix_web::{
-    HttpResponse, Responder,
-    cookie::{Cookie, CookieBuilder, time::Duration},
-    post, web,
-};
-use argon2::{
-    self, PasswordHash, PasswordVerifier,
-    password_hash::{SaltString, rand_core::OsRng},
-};
-use argon2::{Argon2, PasswordHasher};
-use chrono::{DateTime, TimeDelta, Utc};
-use rand::{self, Rng};
-use serde::{Deserialize, Serialize};
-use sqlx::{Error, Executor};
-
 use crate::{
-    api::types::{UserFull, UserLoginRequest},
-    db::{self, Pool},
-    security,
+    services::{
+        session::{SessionService, SessionServiceError},
+        user::{UserService, UserServiceError},
+    },
+    types::{
+        session::RefreshRequest,
+        user::{UserCreateRequest, UserLoginResponse, UserPublicView},
+    },
 };
+use actix_web::{HttpResponse, Responder, web};
 
-#[derive(Deserialize)]
-pub struct UserCreateRequest {
-    tag: String,
-    username: String,
-    password: String,
-}
-
-#[derive(Serialize)]
-pub struct UserCreateResponse {
-    tag: String,
-    username: String,
-    token: String,
-}
+use crate::types::user::UserLoginRequest;
 
 pub fn get_scope() -> actix_web::Scope {
-    return web::scope("/auth");
+    return web::scope("/auth")
+        .service(web::resource("/register").to(register))
+        .service(web::resource("/login").to(login))
+        .service(web::resource("/refresh").to(refresh))
+        .service(web::resource("/logout").to(logout));
 }
 
-pub async fn login(pool: web::Data<Pool>, login: UserLoginRequest) -> impl Responder {
-    let res = db::user::get_user(&pool, &login.tag).await;
-    match res {
-        Ok(Some(user)) => {
-            let hash = PasswordHash::new(&user.password_hash);
-            match hash {
-                Ok(hash) => {
-                    match Argon2::default().verify_password(login.password.as_bytes(), &hash) {
-                        Err(_) => HttpResponse::Unauthorized().finish(),
-                        Ok(_) => HttpResponse::Ok()
-                            .cookie(
-                                CookieBuilder::new(
-                                    "refresh",
-                                    security::jwt::get_token(
-                                        "ya_hz_chto_tut_pisat".to_string(),
-                                        Utc::now(),
-                                        Utc::now() + TimeDelta::weeks(4),
-                                    )
-                                    .unwrap_or_default(),
-                                )
-                                .http_only(true)
-                                .max_age(Duration::weeks(4))
-                                .finish(),
-                            )
-                            .cookie(
-                                CookieBuilder::new(
-                                    "access",
-                                    security::jwt::get_token(
-                                        "ya_hz_chto_tut_pisat".to_string(),
-                                        Utc::now(),
-                                        Utc::now() + TimeDelta::weeks(4),
-                                    )
-                                    .unwrap_or_default(),
-                                )
-                                .http_only(true)
-                                .max_age(Duration::minutes(10))
-                                .finish(),
-                            )
-                            .json(user),
-                    }
-                }
-                Err(_) => HttpResponse::InternalServerError().finish(),
-            }
-        }
-        Ok(None) => HttpResponse::Unauthorized().finish(),
-        Err(_) => HttpResponse::InternalServerError().finish(),
+async fn login(
+    user_service: web::Data<UserService>,
+    session_service: web::Data<SessionService>,
+    login: web::Json<UserLoginRequest>,
+) -> impl Responder {
+    match user_service
+        .login(&session_service, login.0, "UserAgent".to_string())
+        .await
+    {
+        Ok((user, access, refresh)) => HttpResponse::Ok().json(UserLoginResponse {
+            user: UserPublicView::from(user),
+            access,
+            refresh,
+        }),
+        Err(err) => match err {
+            UserServiceError::InvalidCredentials => HttpResponse::Unauthorized().finish(),
+            _ => HttpResponse::InternalServerError().finish(),
+        },
+    }
+}
+
+async fn register(
+    service: web::Data<UserService>,
+    create: web::Json<UserCreateRequest>,
+) -> impl Responder {
+    match service.register(create.0).await {
+        Ok(_) => HttpResponse::Created().finish(),
+        Err(err) => match err {
+            UserServiceError::UniqueViolation => HttpResponse::Conflict().finish(),
+            UserServiceError::Validation(verr) => HttpResponse::BadRequest().body(verr),
+            _ => HttpResponse::InternalServerError().finish(),
+        },
+    }
+}
+
+async fn refresh(
+    service: web::Data<SessionService>,
+    req: web::Json<RefreshRequest>,
+) -> impl Responder {
+    match service.refresh_access(&req.refresh).await {
+        Ok(access) => HttpResponse::Ok().body(access),
+        Err(err) => match err {
+            SessionServiceError::Expired => HttpResponse::Unauthorized().body("Expired"),
+            SessionServiceError::InvalidToken => HttpResponse::Unauthorized().finish(),
+            SessionServiceError::NotFound => HttpResponse::Unauthorized().finish(),
+            _ => HttpResponse::InternalServerError().finish(),
+        },
+    }
+}
+
+async fn logout(
+    service: web::Data<SessionService>,
+    req: web::Json<RefreshRequest>,
+) -> impl Responder {
+    match service.logout(&req.refresh).await {
+        Ok(_) => HttpResponse::Ok().finish(),
+        Err(err) => match err {
+            SessionServiceError::InvalidToken => HttpResponse::Unauthorized().finish(),
+            _ => HttpResponse::InternalServerError().finish(),
+        },
     }
 }

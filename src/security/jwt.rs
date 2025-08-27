@@ -1,26 +1,29 @@
-use chrono::{DateTime, Timelike, Utc};
+use chrono::{Duration, Utc};
 use jsonwebtoken::{DecodingKey, EncodingKey, Header, Validation, decode, encode, errors::Error};
 use serde::{Deserialize, Serialize};
-use std::time::{SystemTime, UNIX_EPOCH};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
     pub sub: String,
+    pub kind: String,
     pub exp: usize,
     pub iat: usize,
 }
 
-pub fn get_token(sub: String, now: DateTime<Utc>, exp: DateTime<Utc>) -> Result<String, Error> {
-    // let now = SystemTime::now()
-    //     .duration_since(UNIX_EPOCH)
-    //     .unwrap()
-    //     .as_secs();
-    // let exp = now + secs; // 15 минут
+pub enum TokenType {
+    Refresh,
+    Access,
+}
 
+pub fn encode_token(sub: u32, kind: TokenType, lifetime: Duration) -> Result<String, Error> {
     let claims = Claims {
-        sub,
-        iat: now.timestamp() as usize,
-        exp: exp.timestamp() as usize,
+        sub: sub.to_string(),
+        kind: match kind {
+            TokenType::Access => "access".to_string(),
+            TokenType::Refresh => "refresh".to_string(),
+        },
+        iat: Utc::now().timestamp() as usize,
+        exp: (Utc::now() + lifetime).timestamp() as usize,
     };
 
     encode(
@@ -30,10 +33,9 @@ pub fn get_token(sub: String, now: DateTime<Utc>, exp: DateTime<Utc>) -> Result<
     )
 }
 
-pub fn verify_token(token: String) -> Result<Claims, Error> {
-    // `token` is a struct with 2 fields: `header` and `claims` where `claims` is your own struct.
+pub fn decode_token(token: &str) -> Result<Claims, Error> {
     let token = decode::<Claims>(
-        &token,
+        token,
         &DecodingKey::from_secret("secret".as_ref()),
         &Validation::default(),
     )?;

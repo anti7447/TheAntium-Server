@@ -1,22 +1,20 @@
 mod api;
-mod auth;
 mod db;
 mod pages;
+mod repos;
 mod security;
-
-use api::post_verify;
-use api::users::post_users;
-
-use pages::main_page;
+mod services;
+mod types;
 
 use actix_files as fs;
-use actix_web::{
-    App, HttpServer,
-    middleware::Logger,
-    web::{self, Data},
-};
+use actix_web::{App, HttpServer, middleware::Logger, web::Data};
 use argon2::Argon2;
 use env_logger::Env;
+
+use crate::{
+    repos::{session::SessionRepo, user::UserRepo},
+    services::{session::SessionService, user::UserService},
+};
 
 const ADDRESS: &str = "127.0.0.1";
 const PORT: u16 = 8080;
@@ -29,21 +27,17 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
+            .app_data(Data::new(UserService::new(UserRepo::new(
+                db::get().clone(),
+            ))))
+            .app_data(Data::new(SessionService::new(SessionRepo::new(
+                db::get().clone(),
+            ))))
             .app_data(Data::new(db::get().clone()))
             .app_data(Data::new(Argon2::default()))
             .service(fs::Files::new("/assets", "./front/assets"))
-            .service(main_page)
-            .service(
-                web::scope("/auth")
-                    .service(auth::post_login)
-                    .service(auth::delete_logout),
-            )
-            .service(
-                web::scope("/api/v1")
-                    .service(post_users)
-                    .service(post_verify),
-            )
-            // .service(api::get_scope())
+            .service(api::get_scope())
+            .service(pages::get_scope())
             .wrap(Logger::default())
     })
     .bind((ADDRESS, PORT))?

@@ -1,6 +1,5 @@
 # TODO:
- ## progress bar
- - Endpoints
+## Endpoints
  - [ ] GET    /
 
  - [ ] POST   /auth/login
