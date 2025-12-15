@@ -13,10 +13,10 @@
             rel="stylesheet"
         />
 
-        <link rel="stylesheet" type="text/css" href="css/reset.css" />
-        <link rel="stylesheet" type="text/css" href="css/style2.css" />
-        <link rel="icon" href="img/TheAntium_Logo3.png" />
-        <script type="text/javascript" src="/s"></script>
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css" />
+        <link rel="stylesheet" type="text/css" href="/assets/css/style2.css" />
+        <link rel="icon" href="/assets/img/TheAntium_Logo3.png" />
+        <script type="text/javascript" src="/assets/js/register.js"></script>
     </head>
     <body>
         <header></header>
@@ -24,16 +24,32 @@
             <section id="login-windows">
                 <div class="login_logo">Anti</div>
                 <div class="login-windows_input-wrapper">
-                    <input type="text" placeholder="Логин" />
+                    <input
+                        id="register_login"
+                        type="text"
+                        placeholder="Логин"
+                    />
                 </div>
                 <div class="login-windows_input-wrapper">
-                    <input type="text" placeholder="Никнейм" />
+                    <input
+                        id="register_name"
+                        type="text"
+                        placeholder="Никнейм"
+                    />
                 </div>
                 <div class="login-windows_input-wrapper">
-                    <input type="text" placeholder="Пароль" />
+                    <input
+                        id="register_password"
+                        type="text"
+                        placeholder="Пароль"
+                    />
                 </div>
                 <div class="login-windows_button-container">
-                    <button class="button primary" type="button">
+                    <button
+                        class="button primary"
+                        type="button"
+                        onclick="register()"
+                    >
                         Регистрация
                     </button>
                 </div>
