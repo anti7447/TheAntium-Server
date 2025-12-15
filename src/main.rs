@@ -8,16 +8,21 @@ use api::post_verify;
 use api::users::post_users;
 
 use pages::main_page;
+use pages::register_page;
 
 use actix_files as fs;
 use actix_web::{
-    middleware::Logger, web::{self, Data}, App, HttpServer
+    App, HttpServer,
+    middleware::Logger,
+    web::{self, Data},
 };
 use argon2::Argon2;
 use env_logger::Env;
 
-const ADDRESS: &str = "127.0.0.1";
+const ADDRESS: &str = "0.0.0.0";
 const PORT: u16 = 8080;
+
+const DOMAIN: &str = "theantium.fun"; // if cfg!(debug_assertions) { "localhost" } else { "ss" };
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -31,6 +36,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(Data::new(Argon2::default()))
             .service(fs::Files::new("/assets", "./front/assets"))
             .service(main_page)
+            .service(register_page)
             .service(
                 web::scope("/auth")
                     .service(auth::post_login)
