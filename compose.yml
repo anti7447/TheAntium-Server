@@ -1,0 +1,7 @@
+services:
+  web:
+    image: theantium-server:prod
+    ports:
+      - "127.0.0.1:10001:8080"
+    volumes:
+      - ./data.db:/app/data.db

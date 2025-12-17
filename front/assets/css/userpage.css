@@ -1,0 +1,491 @@
+.profile-header {
+    width: 42%;
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-status .status-label {
+    color: rgba(114, 146, 187, 1);
+}
+
+.user-status .status-value {
+    color: rgba(136, 255, 207, 1);
+}
+
+.user-profile-banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background: #2f496c;
+    background-position: center;
+    border-radius: 16px;
+    padding: 13px;
+    padding-bottom: 30px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.button_reset-baner {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.button_reset-baner button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.button_reset-baner button img {
+    width: 18px;
+}
+
+.container-profile-info-base {
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+    justify-content: space-between;
+    width: 70%;
+    right: -5px;
+}
+
+.user-profile-banner h1 {
+    color: rgba(255, 255, 255, 1);
+    margin: 0;
+}
+
+.detail-label {
+    color: rgba(114, 146, 187, 1);
+    font-size: 14px;
+}
+
+.detail-value {
+    margin: 16px 0;
+    color: rgba(255, 255, 255, 1);
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.details-container {
+    display: flex;
+    margin: 50px 0;
+    width: 100%;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.profile-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.profile-actions button {
+    margin: 0;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.profile-actions button:hover {
+    opacity: 0.9;
+}
+
+.btn-logout {
+    background-color: rgba(200, 108, 108, 1);
+}
+
+.btn-save {
+    background: rgba(84, 130, 179, 1);
+}
+
+.profile-actions button {
+    border-radius: 15px;
+    border: none;
+    height: 35px;
+    width: 100px;
+    color: white;
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 100%;
+    text-align: center;
+}
+
+.emoji-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.emoji-btn img {
+    width: 25px;
+    height: 25px;
+}
+
+.user-info-line {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.first-name, .last-name {
+    font-size: 28px;
+    margin: 0;
+    color: rgba(255, 255, 255, 1);
+}
+
+.user-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#profile-heading {
+    margin-bottom: 5px;
+}
+
+/* === Адаптация для мобильных устройств === */
+@media (max-width: 768px) {
+    .profile-header {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .user-profile-banner {
+        padding: 15px;
+        padding-bottom: 25px;
+        background-size: cover;
+        border-radius: 12px;
+    }
+
+    .container-profile-info-base {
+        width: 100%;
+        right: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .user-info-line {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .first-name, .last-name {
+        font-size: 22px;
+    }
+
+    .user-status {
+        flex-direction: row;
+        gap: 6px;
+    }
+
+    .details-container {
+        /* flex-direction: column; */
+        margin: 30px 0;
+        gap: 25px;
+    }
+
+    .detail-value {
+        margin: 12px 0;
+        font-size: 16px;
+    }
+
+    .profile-actions {
+        justify-content: flex-end;
+        width: 100%;
+    }
+
+    .profile-actions button {
+        width: 90px;
+        height: 32px;
+        font-size: 13px;
+    }
+
+    .button_reset-baner button img {
+        width: 16px;
+    }
+
+    .emoji-btn img {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-profile-banner {
+        padding: 12px;
+        padding-bottom: 20px;
+    }
+
+    .first-name, .last-name {
+        font-size: 20px;
+    }
+
+    .user-info-line {
+        gap: 10px;
+    }
+
+    .user-status {
+        gap: 5px;
+    }
+
+    .user-status .status-label,
+    .user-status .status-value {
+        font-size: 13px;
+    }
+
+    .profile-actions {
+        gap: 8px;
+    }
+
+    .profile-actions button {
+        width: 85px;
+        height: 30px;
+        font-size: 12px;
+        border-radius: 12px;
+    }
+
+    .details-container {
+        margin: 25px 0;
+        gap: 20px;
+    }
+}
+
+/* === Общие улучшения === */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Inter", sans-serif;
+}
+
+button {
+    font-family: inherit;
+}
+
+
+/*
+.profile-header {
+    width: 42%;
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-status .status-label {
+    color: rgba(114, 146, 187, 1);
+}
+
+.user-status .status-value {
+    color: rgba(136, 255, 207, 1);
+}
+
+.user-profile-banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background: url(../img/test_baner.png);
+    background-position: center;
+    border-radius: 16px;
+    padding: 13px;
+    padding-bottom: 30px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.button_reset-baner  {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.button_reset-baner button {
+    background: none;
+    border: none;
+}
+
+.button_reset-baner button img {
+    width: 18px;
+}
+
+.container-profile-info-base {
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+    justify-content: space-between;
+    width: 70%;
+    right: -5px;
+}
+
+.user-profile-banner h1 {
+    color: rgba(255, 255, 255, 1);
+}
+
+.detail-label {
+    color: rgba(114, 146, 187, 1);
+}
+
+.detail-value {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.visually-hidden {
+    display: none;
+}
+
+.details-container {
+    display: flex;
+    margin-bottom: 50px;
+    margin-top: 50px;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.profile-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.profile-actions button {
+    margin: 5px;
+}
+
+.btn-logout {
+    background-color: rgba(200, 108, 108, 1);
+}
+
+.btn-save {
+    background: rgba(84, 130, 179, 1);
+}
+
+.profile-actions button {
+    border-radius: 15px;
+    border: none;
+    height: 35px;
+    width: 100px;
+    color: white;
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-style: "Regular";
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.emoji-btn {
+    background: none;
+    border: none;
+}
+
+.emoji-btn img {
+    width: 25px;
+}
+
+.first-name, .last-name {
+    font-size: 28px;
+}
+
+#profile-heading {
+    margin-bottom: 5px;
+}
+
+@media (max-width: 768px) {
+    .profile-header {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .user-profile-banner {
+        padding: 10px;
+        padding-bottom: 20px;
+        background-size: cover;
+        border-radius: 12px;
+    }
+
+    .container-profile-info-base {
+        width: 100%;
+        right: 0;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .details-container {
+        margin: 30px 0;
+        gap: 20px;
+    }
+
+    .profile-actions {
+        justify-content: center;
+    }
+
+    .profile-actions button {
+        width: 90px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .first-name, .last-name {
+        font-size: 22px;
+    }
+
+    .detail-value {
+        margin: 10px 0;
+    }
+
+    .button_reset-baner button img {
+        width: 16px;
+    }
+
+    .emoji-btn img {
+        width: 22px;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-profile-banner {
+        padding: 8px;
+        padding-bottom: 15px;
+    }
+
+    .first-name, .last-name {
+        font-size: 20px;
+    }
+
+    .profile-actions {
+        align-items: center;
+        gap: 10px;
+    }
+
+    .profile-actions button {
+        width: 100%;
+        max-width: 200px;
+    }
+}

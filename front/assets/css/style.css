@@ -1,0 +1,377 @@
+:root {
+    --font-color: #fff;
+    --logo-color: #c2e8ff;
+    --dark-color: #011023;
+}
+
+::selection {
+    background: rgba(250, 255, 255, 0.3);
+    /* color: #000; */
+}
+
+body {
+    background: var(--dark-color);
+    color: var(--font-color);
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    /* font-size: 38em; */
+    /* font-weight: 38; */
+    font-style: normal;
+}
+
+header {
+    /* max-width: 1000px; */
+    /* display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem; */
+}
+
+footer {
+    background: linear-gradient(to bottom, var(--dark-color), #5381b2) no-repeat;
+}
+
+/* Контейнеры */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+.container.header {
+    justify-content: space-between;
+}
+
+.container.main {
+    flex-direction: column;
+    /*margin-bottom: 10vw;*/
+}
+
+.container.footer {
+    /* padding: 10vw 20vw; */
+    padding-top: clamp(0px, 20vw, 200px);
+    padding-bottom: 50px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.logo {
+    color: var(--logo-color);
+    font-size: clamp(2rem, 3vw, 10rem);
+    cursor: default;
+}
+
+.header-nav {
+    color: var(--font-color);
+    font-size: clamp(1rem, 1.3vw, 10rem);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-a {
+    display: flex;
+    align-items: center; /* вот тут текст будет строго по центру иконки */
+    gap: 0.5rem; /* расстояние между иконкой и текстом */
+    text-decoration: none;
+}
+
+/* SVG-иконки */
+
+.forum-icon {
+    /* stroke: #3498db; */
+    width: 1em;
+    height: 0.8em;
+    stroke-width: 2;
+    fill: var(--logo-color);
+}
+
+.wiki-icon {
+    width: 1em;
+    height: 0.8em;
+    stroke: var(--logo-color);
+    stroke-width: 2;
+    stroke-linecap: "round";
+    stroke-linejoin: "round";
+}
+
+.user-icon {
+    height: 70%;
+    stroke: #5482b3;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.main-h {
+    margin: 1rem auto;
+    font-size: clamp(1rem, 2vw, 10rem);
+    text-align: center;
+}
+
+/* Кнопка входа / навигации (профиль, etc.) */
+
+.user-button {
+    width: clamp(2rem, 2.8vw, 10rem);
+    height: clamp(2rem, 2.8vw, 10rem);
+    margin-left: 1rem;
+    background: var(--logo-color);
+    border-radius: 10px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* MAIN */
+
+/* ====== PROJECT CARDS ======== */
+
+.project-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    /* padding-right: 1rem; */
+}
+
+.project-section {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+/* .main-h {
+    margin: 0 auto;
+} */
+
+/* Cards */
+
+.project-card {
+    /* flex: 0 1 420px; */
+    flex: 0 0 auto;
+    width: clamp(2rem, 30%, 10000rem);
+    aspect-ratio: 1 / 1;
+    position: relative;
+    /* height: ; */
+    /* background-color:; */
+    /* background: url("https://i.pinimg.com/550x/87/ad/4a/87ad4a1150e6d03d624d9a4f036e97db.jpg")
+        center/cover no-repeat; */
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    scroll-snap-align: start;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.project-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    overflow: hidden;
+}
+
+.project-card:hover {
+    transform: scale(1.05);
+}
+
+/* Градиент поверх картинки */
+.project-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #4c78a5, transparent);
+}
+
+.project-card-link {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+}
+
+/* затемнённая градиентная плашка снизу */
+.project-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+    /* background: linear-gradient(to top, #4c78a5, transparent); */
+    color: white;
+    font-size: 1rem;
+}
+
+.project-card-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    color: white;
+    padding: 1rem;
+    z-index: 1;
+}
+
+/* POSTs for phones */
+
+@media (max-width: 500px) {
+    .project-container {
+        flex-direction: row;
+        /* flex-wrap: wrap; */
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .project-card {
+        width: 50%; /* или 90%, если хочешь отступы */
+    }
+}
+
+/* ====== POST CARDS ======== */
+
+.post-container {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    align-items: center;
+}
+
+.post-section {
+    width: 100%;
+    margin-bottom: 10vw;
+}
+
+.post-card {
+    /* flex: 0 1 420px; */
+    flex: 0 0 auto;
+    width: clamp(2rem, 62%, 10000rem);
+    aspect-ratio: 1 / 0.5;
+    position: relative;
+    border-radius: 1rem;
+    background: #316ddd;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    scroll-snap-align: start;
+}
+
+.post-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    overflow: hidden;
+}
+
+/* Градиент поверх картинки */
+.post-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #4c78a5, transparent);
+}
+
+.post-card-link {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+}
+
+.post-card-text {
+    font-size: clamp(1rem, 3vw, 2.5rem);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    color: white;
+    padding: clamp(1rem, 4vw, 10rem);
+    z-index: 1;
+}
+
+div.post-card-text {
+    height: 100%;
+    z-index: 0;
+}
+
+.post-card-text-title {
+    width: 49%;
+    /* font-size: 2rem; */
+    margin-bottom: clamp(0px, 4vw, 2rem);
+}
+
+.post-card-text-description {
+    /* position: absolute; */
+    /* bottom: 0; */
+    /* left: 0; */
+    /* width: 100%; */
+    /* color: white; */
+    /* padding: 1rem; */
+    /* z-index: 0; */
+    font-size: clamp(1rem, 1.5vw, 1.3rem);
+}
+
+/* POSTs for phones */
+
+@media (max-width: 500px) {
+    .posts-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .post-card {
+        width: 100%; /* или 90%, если хочешь отступы */
+    }
+}
+
+/*  FOTER */
+
+.footer-links {
+    display: flex;
+    gap: 4rem;
+}
+
+.footer-links li {
+    margin: 1rem 0;
+}
+
+.footer-divider {
+    width: 2px;
+    background-color: rgba(255, 255, 255, 0.2);
+    height: 100%;
+}
+
+.footer-creators h3 {
+    color: #6a8bae;
+}
+
+/* 📱 Для экранов до 600px шириной */
+@media (max-width: 630px) {
+    .container.footer {
+        padding-top: 30px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-divider {
+        width: 80%;
+        height: 1px;
+        margin: 1rem 0;
+    }
+
+    .footer-links,
+    .footer-creators {
+        text-align: center;
+    }
+
+    .footer-links ul {
+        margin: 0.5rem 0;
+    }
+}
