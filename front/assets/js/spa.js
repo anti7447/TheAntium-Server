@@ -1,7 +1,7 @@
 // alert("Hi!");
 
 function renderMain() {
-  alert("main");
+  // alert("main");
 }
 
 function renderForum() {
@@ -25,8 +25,13 @@ function routeHandle(path) {
     const args = path.match(p.path);
     if (args) {
       p.handler(...args.slice(1));
-      break;
+      // break;
+      return;
     }
+  }
+
+  if (path.startsWith("https")) {
+    window.location.href = path;
   }
 }
 
