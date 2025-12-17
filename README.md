@@ -1,3 +1,7 @@
+# TheAntium Server
+still in development
+Right now, only prealpha is available, with all the bugs, vulnerabilities, strange solutions and inconveniences
+
 # TODO:
  ## progress bar
  - Endpoints
