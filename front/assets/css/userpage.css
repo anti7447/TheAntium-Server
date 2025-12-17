@@ -15,12 +15,12 @@
     color: rgba(136, 255, 207, 1);
 }
 
-.user-profile-banner { 
+.user-profile-banner {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    background: url(../img/test_baner.png);
+    background: #2f496c;
     background-position: center;
     border-radius: 16px;
     padding: 13px;
@@ -287,7 +287,7 @@ button {
 }
 
 
-/* 
+/*
 .profile-header {
     width: 42%;
 }
@@ -298,14 +298,14 @@ button {
 }
 
 .user-status .status-label {
-    color: rgba(114, 146, 187, 1); 
+    color: rgba(114, 146, 187, 1);
 }
 
 .user-status .status-value {
     color: rgba(136, 255, 207, 1);
 }
 
-.user-profile-banner { 
+.user-profile-banner {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -315,7 +315,7 @@ button {
     border-radius: 16px;
     padding: 13px;
     padding-bottom: 30px;
-    background-size: cover; 
+    background-size: cover;
     background-repeat: no-repeat;
 }
 
@@ -419,37 +419,37 @@ button {
 
 @media (max-width: 768px) {
     .profile-header {
-        width: 100%; 
+        width: 100%;
         margin-bottom: 20px;
     }
 
     .user-profile-banner {
-        padding: 10px; 
+        padding: 10px;
         padding-bottom: 20px;
-        background-size: cover; 
-        border-radius: 12px; 
+        background-size: cover;
+        border-radius: 12px;
     }
 
     .container-profile-info-base {
-        width: 100%; 
-        right: 0; 
-        flex-direction: column; 
-        align-items: flex-start; 
+        width: 100%;
+        right: 0;
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .details-container {
         margin: 30px 0;
-        gap: 20px; 
+        gap: 20px;
     }
 
     .profile-actions {
-        justify-content: center; 
+        justify-content: center;
     }
 
     .profile-actions button {
-        width: 90px; 
+        width: 90px;
         height: 32px;
-        font-size: 14px; 
+        font-size: 14px;
     }
 
     .first-name, .last-name {
@@ -461,7 +461,7 @@ button {
     }
 
     .button_reset-baner button img {
-        width: 16px; 
+        width: 16px;
     }
 
     .emoji-btn img {
@@ -488,4 +488,4 @@ button {
         width: 100%;
         max-width: 200px;
     }
-} 
+}

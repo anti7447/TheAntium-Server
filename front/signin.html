@@ -13,10 +13,10 @@
             rel="stylesheet"
         />
 
-        <link rel="stylesheet" type="text/css" href="assets/css/reset.css" />
-        <link rel="stylesheet" type="text/css" href="assets/css/style2.css" />
-        <link rel="icon" href="assets/img/TheAntium_Logo3.png" />
-        <script type="text/javascript" src="/s"></script>
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css" />
+        <link rel="stylesheet" type="text/css" href="/assets/css/style2.css" />
+        <link rel="icon" href="/assets/img/TheAntium_Logo3.png" />
+        <script type="text/javascript" src="/assets/js/auth.js"></script>
     </head>
     <body>
         <header></header>
@@ -24,16 +24,16 @@
             <section id="login-windows">
                 <div class="login_logo">Anti</div>
                 <div class="login-windows_input-wrapper">
-                    <input type="text" placeholder="Логин" />
+                    <input type="text" id="signin_login" placeholder="Логин" />
                 </div>
                 <div class="login-windows_input-wrapper">
-                    <input type="text" placeholder="Пароль" />
-                    <a href="#" class="a forgot-pass">Забыли пароль?</a>
+                    <input type="text" id="signin_password" placeholder="Пароль" />
+                    <a href="" class="a forgot-pass">Забыли пароль?</a>
                 </div>
                 <div class="login-windows_button-container">
-                    <button class="button primary" type="button">Войти</button>
+                    <button id="signin_button" class="button primary" type="button" onclick="signin()">Войти</button>
                 </div>
-                <a href="#" class="a havnt-account">Нет аккаунта?</a>
+                <a href="/register" class="a havnt-account">Нет аккаунта?</a>
             </section>
         </main>
     </body>

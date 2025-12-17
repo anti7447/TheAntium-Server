@@ -120,20 +120,22 @@ pub async fn post_login(
 
     let session_offset = OffsetDateTime::from_unix_timestamp(session_exp.timestamp()).unwrap();
     let session_cookie = Cookie::build("session_token", session_token.as_str())
-        .domain(DOMAIN)
+        // .domain("localhost")
         .expires(session_offset)
         .http_only(true)
         .path("/")
         .secure(true)
+        .same_site(actix_web::cookie::SameSite::Lax)
         .finish();
 
     let user_offset = OffsetDateTime::from_unix_timestamp(user_exp.timestamp()).unwrap();
     let user_cookie = Cookie::build("user_token", user_token.as_str())
-        .domain(DOMAIN)
+        // .domain("theantium.fun")
         .expires(user_offset)
         .http_only(true)
         .path("/")
         .secure(true)
+        .same_site(actix_web::cookie::SameSite::Lax)
         .finish();
 
     HttpResponse::Accepted()
@@ -298,4 +300,3 @@ fn get_device_name<'a>(req: &'a HttpRequest) -> Option<&'a str> {
 
 // $argon2id$v=19$m=19456,t=2,p=1$cvtZm9CFRDdkbVNcCKRPaw$8s7RFp2KUjjbv3GZH7a8oLMn6f4c+XPf7ZlF4TSi0ng
 // $argon2id$v=19$m=19456,t=2,p=1$jcerSVgHdyZLwGjjUisv0g$P+TtFdtE7qD3jqKHwMOQ8K6L+kEGDQAbmK3tzNWazL4
-

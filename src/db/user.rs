@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 
-use crate::api::types::UserFull;
 use crate::api::types::Session;
+use crate::api::types::UserFull;
 use crate::db::Pool;
 
 pub async fn create(
@@ -34,6 +34,13 @@ pub async fn get_id(
 pub async fn get_user(pool: &Pool, tag: &String) -> Result<Option<UserFull>, sqlx::Error> {
     sqlx::query_as(include_str!("sql/user/get_user.sql"))
         .bind(tag)
+        .fetch_optional(pool)
+        .await
+}
+
+pub async fn get_user_by_id(pool: &Pool, id: &u32) -> Result<Option<UserFull>, sqlx::Error> {
+    sqlx::query_as(include_str!("sql/user/get_user_by_id.sql"))
+        .bind(id)
         .fetch_optional(pool)
         .await
 }

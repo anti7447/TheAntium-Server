@@ -7,8 +7,10 @@ mod security;
 use api::post_verify;
 use api::users::post_users;
 
+use pages::login_page;
 use pages::main_page;
 use pages::register_page;
+use pages::user_page;
 
 use actix_files as fs;
 use actix_web::{
@@ -37,6 +39,8 @@ async fn main() -> std::io::Result<()> {
             .service(fs::Files::new("/assets", "./front/assets"))
             .service(main_page)
             .service(register_page)
+            .service(login_page)
+            .service(user_page)
             .service(
                 web::scope("/auth")
                     .service(auth::post_login)

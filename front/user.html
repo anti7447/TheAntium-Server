@@ -12,10 +12,10 @@
             rel="stylesheet"
         />
 
-        <link rel="stylesheet" type="text/css" href="assets/css/reset.css" />
-        <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
-        <link rel="stylesheet" type="text/css" href="assets/css/userpage.css" />
-        <link rel="icon" href="assets/img/TheAntium_Logo3.png" />
+        <link rel="stylesheet" type="text/css" href="/assets/css/reset.css" />
+        <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
+        <link rel="stylesheet" type="text/css" href="/assets/css/userpage.css" />
+        <link rel="icon" href="/assets/img/TheAntium_Logo3.png" />
     </head>
     <body>
         <header>
@@ -62,120 +62,122 @@
         <main id="app" role="main">
             <div class="container main">
                 <header class="profile-header">
-                    
+
                     <article class="user-profile-card" aria-labelledby="profile-heading">
-                        
+
                         <!-- Баннер профиля -->
                         <section class="user-profile-banner" aria-label="Баннер профиля">
                             <div class="button_reset-baner">
-                                <button><img src="assets/img/baner_reset.png" alt=""></button>
+                                <button>
+                                    <img src="/assets/img/baner_reset.png" alt="">
+                                </button>
                             </div>
                             <div class="container-profile-info-base">
                                 <!-- Аватар пользователя -->
                                     <figure class="user-avatar">
                                         <div class="avatar-container" style="position: relative; width: 70px; height: 70px;">
                                             <!-- Фоновый прямоугольник -->
-                                            <svg width="70" height="70" viewBox="0 0 216 216" fill="none" xmlns="http://www.w3.org/2000/svg" 
+                                            <svg width="70" height="70" viewBox="0 0 216 216" fill="none" xmlns="http://www.w3.org/2000/svg"
                                                  style="position: absolute; top: 0; left: 0;">
                                                 <rect width="216" height="216" rx="61.7143" fill="#C2E8FF"/>
                                             </svg>
-                                            
+
                                             <!-- Иконка пользователя (центрированная) -->
                                             <svg width="50" height="50" viewBox="0 0 119 149" fill="none" xmlns="http://www.w3.org/2000/svg"
                                                  style="position: absolute; top: 10px; left: 10px;">
-                                                <path d="M5.53906 143.972C5.53906 114.149 29.7157 89.9724 59.5391 89.9724C89.3625 89.9724 113.539 114.149 113.539 143.972M90.3962 35.9724C90.3962 53.0143 76.5807 66.8295 59.5391 66.8295C42.4971 66.8295 28.6819 53.0143 28.6819 35.9724C28.6819 18.9304 42.4971 5.11523 59.5391 5.11523C76.5807 5.11523 90.3962 18.9304 90.3962 35.9724Z" 
+                                                <path d="M5.53906 143.972C5.53906 114.149 29.7157 89.9724 59.5391 89.9724C89.3625 89.9724 113.539 114.149 113.539 143.972M90.3962 35.9724C90.3962 53.0143 76.5807 66.8295 59.5391 66.8295C42.4971 66.8295 28.6819 53.0143 28.6819 35.9724C28.6819 18.9304 42.4971 5.11523 59.5391 5.11523C76.5807 5.11523 90.3962 18.9304 90.3962 35.9724Z"
                                                       stroke="#5482B3" stroke-width="9.25714" stroke-linecap="round" stroke-linejoin="round"/>
                                             </svg>
                                         </div>
                                         <figcaption class="visually-hidden">Аватар пользователя Иван Иванов</figcaption>
                                     </figure>
-                                    
+
                                     <!-- Основная информация профиля -->
                                     <div class="user-profile-info">
                                         <h1 id="profile-heading" class="user-name">
                                             <span class="first-name">Иван</span>
-                                            <span class="last-name">Иванов</span>
-                                            <button class="emoji-btn"><img src="assets/img/emoji.png" alt="Выбор статуса с эмоджи"></button>
+                                            <!-- <span class="last-name">Иванов</span> -->
+                                            <button class="emoji-btn"><img src="/assets/img/emoji.png" alt="Выбор статуса с эмоджи"></button>
                                         </h1>
-                                        
+
                                         <div class="user-status" aria-label="Статус пользователя">
                                             <span class="status-label">Статус:</span>
-                                            <span class="status-value" aria-live="polite">Онлайн</span>
+                                            <span class="status-value" aria-live="polite">не работает</span>
                                         </div>
                                     </div>
                             </div>
                         </section>
-                        
+
                         <!-- Детальная информация профиля -->
-                        <section class="profile-details" aria-labelledby="details-heading"> 
+                        <section class="profile-details" aria-labelledby="details-heading">
                             <h2 id="details-heading" class="visually-hidden">Детальная информация профиля</h2>
-                            
+
                             <div class="details-container">
-                                
+
                                 <!-- Первая колонка -->
                                 <div class="details-column">
                                     <dl class="user-detail">
-                                        <dt class="detail-label">Имя</dt>
-                                        <dd class="detail-value">Иван</dd>
+                                        <dt class="detail-label">Ник</dt>
+                                        <dd class="detail-value">{{ username }}</dd>
                                     </dl>
-                                    
+
                                     <dl class="user-detail">
                                         <dt class="detail-label">Дата регистрации</dt>
                                         <dd class="detail-value">
-                                            <time datetime="2025-02-02">02/02/2025</time>
+                                            <time datetime="2025-02-02">{{ created_at }}</time>
                                         </dd>
                                     </dl>
-                                    
+
                                     <dl class="user-detail">
                                         <dt class="detail-label">Электронная почта</dt>
                                         <dd class="detail-value">
-                                            <a href="mailto:example@gmail.com" class="user-email">example@gmail.com</a>
+                                            <a href="" class="user-email">example@gmail.com</a>
                                         </dd>
                                     </dl>
                                 </div>
-                                
+
                                 <!-- Вторая колонка -->
                                 <div class="details-column">
                                     <dl class="user-detail">
-                                        <dt class="detail-label">Фамилия</dt>
-                                        <dd class="detail-value">Иванов</dd>
+                                        <dt class="detail-label">Тег</dt>
+                                        <dd class="detail-value">{{ tag }}</dd>
                                     </dl>
-                                    
+
                                     <dl class="user-detail">
-                                        <dt class="detail-label">Сфера деятельности</dt>
-                                        <dd class="detail-value user-industry">Дизайнер</dd>
+                                        <dt class="detail-label">Роль</dt>
+                                        <dd class="detail-value user-industry">{{ role }}</dd>
                                     </dl>
-                                    
+
                                     <dl class="user-detail">
                                         <dt class="detail-label">Телеграм</dt>
                                         <dd class="detail-value">
-                                            <a href="https://t.me/johhnnyss" 
-                                               class="user-telegram" 
+                                            <a href="https://t.me/TheAntium"
+                                               class="user-telegram"
                                                rel="noopener noreferrer">
-                                                @johhnnyss
+                                                @TheAntium
                                             </a>
                                         </dd>
                                     </dl>
                                 </div>
                             </div>
-                            
+
                             <!-- Кнопки действий -->
                             <div class="profile-actions" role="group" aria-label="Действия профиля">
-                                <button type="button" 
-                                        class="btn-logout" 
+                                <button type="button"
+                                        class="btn-logout"
                                         aria-label="Выйти из аккаунта">
                                     Log out
                                 </button>
-                                <button type="button" 
-                                        class="btn-save" 
+                                <button type="button"
+                                        class="btn-save"
                                         aria-label="Сохранить изменения профиля">
                                     Save
                                 </button>
                             </div>
                         </section>
-                        
+
                     </article>
-                    
+
                 </header>
             </div>
         </main>
@@ -217,6 +219,6 @@
             </div>
         </footer>
 
-        <script src="/assets/js/spa.js"></script>
+        <script src="/ssets/js/spa.js"></script>
     </body>
 </html>
